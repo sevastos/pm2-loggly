@@ -18,6 +18,7 @@
       "subdomain": "your-subdomain",
       "tags": "your-tag-1,your-tag-2"
     },
+    "ignore": "",
     "pm2Apps": "your-app-1,your-app-2"
   },
   "apps": [

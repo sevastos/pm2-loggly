@@ -52,6 +52,7 @@ pmx.initModule(
     var options = conf;
     options.logglyClient.json = true;
     options.logglyClient.tags = options.logglyClient.tags.split(',');
+    options.ignore = options.ignore.split(';');
     options.pm2Apps = options.pm2Apps.split(',');
     var client = loggly.createClient(options.logglyClient);
 
@@ -67,6 +68,13 @@ pmx.initModule(
             if (log.process.name !== 'pm2-loggly') {
               if (options.pm2Apps.indexOf(log.process.name) > -1) {
                 console.log(log.data);
+                if (options.ignore && options.ignore.length && log.data && log.data.message) {
+                  for (var i = options.ignore.length - 1; i >= 0; i--) {
+                    if (log.data.message.indexOf(options.ignore[i]) > -1) {
+                      return;
+                    }
+                  }
+                }
                 client.log(
                   getLogglyMeta('info', log.data),
                   [log.process.name]
