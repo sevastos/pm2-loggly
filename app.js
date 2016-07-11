@@ -67,14 +67,14 @@ pmx.initModule(
           bus.on('log:out', function(log) {
             if (log.process.name !== 'pm2-loggly') {
               if (options.pm2Apps.indexOf(log.process.name) > -1) {
-                console.log(log.data);
-                if (options.ignore && options.ignore.length && log.data && log.data.message) {
+                if (options.ignore && options.ignore.length && log.data) {
                   for (var i = options.ignore.length - 1; i >= 0; i--) {
-                    if (log.data.message.indexOf(options.ignore[i]) > -1) {
+                    if (log.data.indexOf(options.ignore[i]) > -1) {
                       return;
                     }
                   }
                 }
+                console.log(log.data);
                 client.log(
                   getLogglyMeta('info', log.data),
                   [log.process.name]
